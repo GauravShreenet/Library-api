@@ -1,4 +1,4 @@
-
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 
@@ -7,6 +7,14 @@ const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(cors());
+
+// DB connection
+import { connectMongoDb } from './config/dbConfig.js';
+connectMongoDb();
+
+//api endpoint
+import userRouter from './router/userRoter.js';
+app.use("/api/v1/users", userRouter);
 
 app.get("/", (req,res)=>{
     res.json({

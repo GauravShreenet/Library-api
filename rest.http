@@ -1,0 +1,19 @@
+# API testing for our Library API's
+# Protocals: http://
+# URL: localhost
+# port: :8000
+# path: api/v1/users or books or admin-users
+
+@rootApi = http://localhost:8000/api/v1/users
+
+# ===== admin user
+### create new admin usere
+POST {{rootApi}}/admin-user
+
+# ===== student user
+### get students profile
+GET {{rootApi}}
+
+
+###create new students account
+POST {{rootApi}}
