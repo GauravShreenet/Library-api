@@ -9,6 +9,15 @@
 # ===== admin user
 ### create new admin usere
 POST {{rootApi}}/admin-user
+Content-Type: application/json
+
+{
+    "fname": "Gaurav",
+    "lname": "Shreenet",
+    "email": "a@a.com",
+    "phone": "0451352524",
+    "password": "12345"
+}
 
 # ===== student user
 ### get students profile
