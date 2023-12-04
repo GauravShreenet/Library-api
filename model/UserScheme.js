@@ -31,6 +31,10 @@ const userScheme = new mongoose.Schema(
         password: {
             type: String,
             required: true
+        },
+        refreshJWT: {
+            type: String,
+            default: "",
         }
     },
     {

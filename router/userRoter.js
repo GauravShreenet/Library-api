@@ -2,6 +2,7 @@ import express from 'express';
 import { compairPassword, hashPassWord } from '../utils/bcrypt.js';
 import { createUser, getUserByEmail } from '../model/UserModel.js';
 import { loginValidation } from '../middlewares/joiValidation.js';
+import { signAccessJWT, signJWTs } from '../utils/jwtHelper.js';
 
 const router = express.Router()
 
@@ -64,9 +65,13 @@ router.post("/login", loginValidation, async (req, res, next) => {
         if (user?._id) {
             const isMatched = compairPassword(password, user.password)
             if (isMatched) {
+
+                const jwts = signJWTs(user.email);
+                
                 return res.json({
                     status: "success",
-                    message: "Login successful"
+                    message: "Login successful",
+                    jwts
                 })
             }
         }
