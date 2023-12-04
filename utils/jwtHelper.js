@@ -13,6 +13,9 @@ export const signAccessJWT = (obj) => {
     return token;
 }
 
+export const accessJWTDecode = (accessJWT) => {
+    return jwt.verify(accessJWT, process.env.JWT_ACCESS_SECRET)
+}
 
 //refresh jwt: user table, exp: 30days
 export const signRefreshJWT = (email) => {

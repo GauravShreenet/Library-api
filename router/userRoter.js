@@ -3,19 +3,9 @@ import { compairPassword, hashPassWord } from '../utils/bcrypt.js';
 import { createUser, getUserByEmail } from '../model/UserModel.js';
 import { loginValidation } from '../middlewares/joiValidation.js';
 import { signAccessJWT, signJWTs } from '../utils/jwtHelper.js';
+import { userAuth } from '../middlewares/authMiddleware.js';
 
 const router = express.Router()
-
-router.get("/", (req, res, next) => {
-    try {
-        res.json({
-            status: 'success',
-            message: 'ToDo get'
-        })
-    } catch (error) {
-        next(error)
-    }
-})
 
 router.post("/", (req, res, next) => {
     try {
@@ -55,6 +45,7 @@ router.post("/admin-user", async (req, res, next) => {
     }
 })
 
+//below this router should be private
 router.post("/login", loginValidation, async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -82,6 +73,18 @@ router.post("/login", loginValidation, async (req, res, next) => {
             status: "error",
             message: "Invalid login details"
         });
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.get("/", userAuth, (req, res, next) => {
+    try {
+        res.json({
+            status: 'success',
+            message: 'ToDo get',
+            user: req.userInfo,
+        })
     } catch (error) {
         next(error)
     }
