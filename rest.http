@@ -34,6 +34,9 @@ Content-Type: application/json
 GET {{rootApi}}
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJAYi5jb20iLCJpYXQiOjE3MDE2NTk3MjksImV4cCI6MTcwMTY2MDYyOX0.DL3JdVvN8FUbO7twrbCC8040ZyRO0uwMCyIzfyNxp0o
 
+### get students profile
+GET {{rootApi}}/get-accessjwt
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJAYi5jb20iLCJpYXQiOjE3MDE3MzY2NDEsImV4cCI6MTcwNDMyODY0MX0.5erShIFQZZAcPoQjHScO-vQumax6AnBYLkHMZXKyY54
 
 ###create new students account
 POST {{rootApi}}

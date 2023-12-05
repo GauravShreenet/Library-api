@@ -10,6 +10,10 @@ export const getUserByEmail = (email) => {
     return UserScheme.findOne({ email })
 }
 
+export const getOneAdmin = (filter) => {
+    return UserScheme.findOne(filter);
+}
+
 //update
 
 

@@ -1,9 +1,10 @@
 import express from 'express';
 import { compairPassword, hashPassWord } from '../utils/bcrypt.js';
-import { createUser, getUserByEmail } from '../model/UserModel.js';
+import { createUser, getUserByEmail, updateRefreshJWT } from '../model/UserModel.js';
 import { loginValidation } from '../middlewares/joiValidation.js';
 import { signAccessJWT, signJWTs } from '../utils/jwtHelper.js';
-import { userAuth } from '../middlewares/authMiddleware.js';
+import { refreshAuth, userAuth } from '../middlewares/authMiddleware.js';
+import { deleteSession } from '../model/session/SessionModel.js';
 
 const router = express.Router()
 
@@ -58,7 +59,7 @@ router.post("/login", loginValidation, async (req, res, next) => {
             if (isMatched) {
 
                 const jwts = signJWTs(user.email);
-                
+
                 return res.json({
                     status: "success",
                     message: "Login successful",
@@ -78,6 +79,25 @@ router.post("/login", loginValidation, async (req, res, next) => {
     }
 })
 
+router.post("/logout", async (req, res, next) => {
+    try {
+        const { accessJWT, email } = req.body;
+
+        accessJWT && (await deleteSession({ token: accessJWT }))
+        
+           email && (await updateRefreshJWT(email, ""))
+        //get user by email
+        return res.json({
+            status: "success",
+            message: "Logged out successful",
+            jwts
+        })
+
+    } catch (error) {
+        next(error)
+    }
+})
+
 router.get("/", userAuth, (req, res, next) => {
     try {
         res.json({
@@ -89,5 +109,7 @@ router.get("/", userAuth, (req, res, next) => {
         next(error)
     }
 })
+
+router.get("/get-accessjwt", refreshAuth)
 
 export default router;
