@@ -5,6 +5,7 @@
 # path: api/v1/users or books or admin-users
 
 @rootApi = http://localhost:8000/api/v1/users
+@bookApi = http://localhost:8000/api/v1/books
 
 # ===== admin user
 ### create new admin usere
@@ -40,3 +41,22 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJAYi5jb20iLCJp
 
 ###create new students account
 POST {{rootApi}}
+
+# ================= Book
+
+###GET all the books
+GET {{bookApi}}
+
+###post new book
+POST {{bookApi}}
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJAYi5jb20iLCJpYXQiOjE3MDE3NTM1NzEsImV4cCI6MTcwMTc1NDQ3MX0.i6yehzdCQEr5CaNR2wn2JKXU5SRnzdRnbgp5Lrt_S0o
+
+{
+    "thumbnail": "https://miro.medium.com/v2/resize:fit:1400/1*qXp9MemqNmYwhoNptxeflg.jpeg",
+    "name": "The Subtle Art of Not Giving a F*ck",
+    "author": "Mark Manson",
+    "isbn": "9781925483857",
+    "publishYr": "2016",
+    "description": "'An in-your-face guide to living with integrity and finding happiness in sometimes-painful places.' Kirkus 'Hilarious, vulgar, and immensely thought-provoking. Only read if you're willing to set aside all excuses and take an active role in living a f*cking better life.' Steve Kamb, bestselling author of Level Up Your Life and founder of nerdfitness.com EVERYTHING WE'VE BEEN TOLD ABOUT HOW TO IMPROVE OUR LIVES IS WRONG. NOW SUPERSTAR BLOGGER MARK MANSON TELLS US WHAT WE NEED TO DO TO GET IT RIGHT. For decades, we've been told that positive thinking is the key to a happy, rich life. Drawing on academic research and the life experience that comes from breaking the rules, Mark Manson is ready to explode that myth. The key to a good life, according to Manson, is..."
+}

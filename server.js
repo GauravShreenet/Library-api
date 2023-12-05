@@ -15,6 +15,8 @@ connectMongoDb();
 //api endpoint
 import userRouter from './router/userRoter.js';
 app.use("/api/v1/users", userRouter);
+import bookRouter from './router/bookRouter.js';
+app.use("/api/v1/books", bookRouter);
 
 app.get("/", (req,res)=>{
     res.json({
