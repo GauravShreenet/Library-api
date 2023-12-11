@@ -9,11 +9,20 @@ export const createBook = (bookObj) => {
 export const getAllBook = () => {
     return BookScheme.find()
 }
+
+export const getBookById = (filter) => {
+    return BookScheme.findById(filter)
+}
+
 export const getABook = (filter) => {
     return BookScheme.findOne( filter )
 }
 
+export const updateBookById = ({_id, ...rest}) => {
+    return BookScheme.findByIdAndUpdate( _id, rest );
+}
+
 //delete
-export const deleteBook = (filter) => {
-    return BookScheme.findOneAndDelete( filter )
+export const deleteBook = (_id) => {
+    return BookScheme.findByIdAndDelete( _id );
 }

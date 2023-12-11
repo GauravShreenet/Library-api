@@ -37,6 +37,40 @@ export const userAuth = async(req, res, next) => {
         next(error)
     }
 }
+export const adminAuth = async(req, res, next) => {
+    try {
+        const { authorization } = req.headers;
+        // validate if accessJWT is valid
+        const decoded = accessJWTDecode(authorization);
+        console.log(decoded);
+        if(decoded?.email){
+            //check if exist in session table
+            const tokenExist = await getSession({token: authorization});
+            if(tokenExist?._id){
+                //extract the email, get user by email
+                const user = await getUserByEmail(decoded.email)
+                if(user?.role === 'admin'){
+                    //everything is true above then set userinfo in req obj and sent to the next middleware
+                    user.password = undefined;
+                    req.userInfo = user;
+
+                   return next();
+                }
+            }
+        
+           
+        }
+        
+        throw new Error("Invalid token");
+        
+    } catch (error) {
+        error.errorCode = 401;
+        if(error.message.includes("jwt expired")){
+            error.errorCode = 403
+        }
+        next(error)
+    }
+}
 
 export const refreshAuth = async(req, res, next) => {
     try {

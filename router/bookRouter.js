@@ -1,14 +1,14 @@
 import express from 'express';
-import { createBook, getAllBook } from '../model/book/BookModel.js';
-import { userAuth } from '../middlewares/authMiddleware.js';
-import { newBookValidation } from '../middlewares/joiValidation.js';
+import { createBook, deleteBook, getAllBook, getBookById, updateBookById } from '../model/book/BookModel.js';
+import { adminAuth, userAuth } from '../middlewares/authMiddleware.js';
+import { newBookValidation, updateBookValidation } from '../middlewares/joiValidation.js';
 
 const router = express.Router()
 
-router.get("/", async(req, res, next) => {
+router.get("/:_id?", async(req, res, next) => {
     try {
-        
-        const books = await getAllBook()
+        const {_id} = req.params;
+        const books = _id ? await getBookById(_id) : await getAllBook();
         res.json({
             status: 'success',
             message: 'Here are the books',
@@ -44,6 +44,46 @@ router.post("/", userAuth, newBookValidation, async(req, res, next) => {
             error.message = "There is another book that has similar ISBN. Please change the isbn and try again"
             error.errorCode = 200;
         }
+        next(error)
+    }
+})
+
+router.put("/", adminAuth, updateBookValidation, async(req, res, next) => {
+    try {
+
+        const books = await updateBookById(req.body);
+        
+        books?._id ? (res.json({
+            status: 'success',
+            message: 'Your book has been updated',
+            books,
+        })) : (res.json({
+            status: 'error',
+            message: 'Unable to update book, try again later',
+            books,
+        }));
+        
+    } catch (error) {
+        next(error)
+    }
+})
+router.delete("/:_id", adminAuth, async(req, res, next) => {
+    try {
+
+        const {_id} = req.params;
+        const books = await deleteBook(_id);
+        
+        books?._id ? (res.json({
+            status: 'success',
+            message: 'Your book has been deleted successfully',
+            books,
+        })) : (res.json({
+            status: 'error',
+            message: 'Unable to delete the book, try again later',
+            books,
+        }));
+        
+    } catch (error) {
         next(error)
     }
 })
