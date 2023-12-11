@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.get("/", async(req, res, next) => {
     try {
-
+        
         const books = await getAllBook()
         res.json({
             status: 'success',
@@ -30,7 +30,7 @@ router.post("/", userAuth, newBookValidation, async(req, res, next) => {
         
         books?._id ? (res.json({
             status: 'success',
-            message: 'Here are the books',
+            message: 'Your book is been added',
             books
         })) : (res.json({
             status: 'error',
@@ -39,6 +39,11 @@ router.post("/", userAuth, newBookValidation, async(req, res, next) => {
         }));
         
     } catch (error) {
+        
+        if(error.message.includes("E11000 duplicate key error collection")){
+            error.message = "There is another book that has similar ISBN. Please change the isbn and try again"
+            error.errorCode = 200;
+        }
         next(error)
     }
 })
