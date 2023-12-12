@@ -6,8 +6,8 @@ export const createBook = (bookObj) => {
 }
 
 //read @filter must be an object
-export const getAllBook = () => {
-    return BookScheme.find()
+export const getAllBook = (filter) => {
+    return BookScheme.find(filter)
 }
 
 export const getBookById = (filter) => {

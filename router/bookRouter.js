@@ -1,14 +1,30 @@
 import express from 'express';
-import { createBook, deleteBook, getAllBook, getBookById, updateBookById } from '../model/book/BookModel.js';
-import { adminAuth, userAuth } from '../middlewares/authMiddleware.js';
+import { createBook, deleteBook, getABook, getAllBook, updateBookById } from '../model/book/BookModel.js';
+import { adminAuth, getUserFromAccessJWT, userAuth } from '../middlewares/authMiddleware.js';
 import { newBookValidation, updateBookValidation } from '../middlewares/joiValidation.js';
 
 const router = express.Router()
 
 router.get("/:_id?", async(req, res, next) => {
     try {
+        const { authorization } = req.headers;
+        let filter={ status: 'active' }
+
+        if(authorization){
+            const user = await getUserFromAccessJWT(authorization)
+            
+            if(user?.role === 'admin'){
+                filter = {}
+            }
+    
+        }
+        
         const {_id} = req.params;
-        const books = _id ? await getBookById(_id) : await getAllBook();
+        const books = _id 
+        ? await getABook({...filter, _id})
+        : await getAllBook(filter);
+
+
         res.json({
             status: 'success',
             message: 'Here are the books',
