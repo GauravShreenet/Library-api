@@ -11,7 +11,7 @@ const burrowScheme = new mongoose.Schema(
             required: true,
         },
         thumbnail: {
-            type: URL,
+            type: String,
             required: true,
         },
         userId: {
@@ -19,12 +19,12 @@ const burrowScheme = new mongoose.Schema(
             required: true,
         },
         userName: {
-            type: URL,
+            type: String,
             required: true,
         },
         reviewGiven: {
             type: mongoose.Types.ObjectId,
-            required: true,
+            default: null,
         },
         dueDate: {
             type: Date,
