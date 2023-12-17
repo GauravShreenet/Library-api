@@ -1,9 +1,9 @@
 import express from 'express';
 import { compairPassword, hashPassWord } from '../utils/bcrypt.js';
-import { createUser, getUserByEmail, updateRefreshJWT } from '../model/UserModel.js';
+import { createUser, getManyStudents, getUserByEmail, updateRefreshJWT } from '../model/UserModel.js';
 import { loginValidation } from '../middlewares/joiValidation.js';
 import { signAccessJWT, signJWTs } from '../utils/jwtHelper.js';
-import { refreshAuth, userAuth } from '../middlewares/authMiddleware.js';
+import { adminAuth, refreshAuth, userAuth } from '../middlewares/authMiddleware.js';
 import { deleteSession } from '../model/session/SessionModel.js';
 
 const router = express.Router()
@@ -104,6 +104,19 @@ router.get("/", userAuth, (req, res, next) => {
             status: 'success',
             message: 'ToDo get',
             user: req.userInfo,
+        })
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.get("/all-users", adminAuth, async (req, res, next) => {
+    try {
+        const users = await getManyStudents()
+        res.json({
+            status: 'success',
+            message: 'ToDo get',
+            users,
         })
     } catch (error) {
         next(error)
