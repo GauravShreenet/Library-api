@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBurrow, getManyBurrow } from '../model/burrow/BurrowModel.js';
+import { createBurrow, getManyBurrow, updateBurrow } from '../model/burrow/BurrowModel.js';
 import { newBurrowValidation } from '../middlewares/joiValidation.js';
 import { updateBookById } from '../model/book/BookModel.js';
 
@@ -10,14 +10,15 @@ router.get("/", async (req, res, next) => {
 
         const { role, _id } = req.userInfo;
         // if admin makes request, return all the burrow history, if loggedin user make requests then return their burrow only based on the userID in burrow table
-        const result =
+        const burrows =
             role === 'admin'
                 ? await getManyBurrow({})
                 : getManyBurrow({ userId: _id })
-        result?.length ?
+        burrows?.length ?
             res.json({
                 status: 'success',
-                message: "Here is the list of burrow hsitory"
+                message: "Here is the list of burrow hsitory",
+                burrows,
             })
             : res.json({
                 status: 'error',
@@ -58,4 +59,40 @@ router.post("/", newBurrowValidation, async (req, res, next) => {
     }
 })
 
+router.patch("/:_id", async(req, res, next) => {
+    try {
+       const {_id} = req.params
+       const userId = req.userInfo
+
+       const filter = {_id, userId}
+
+       const update = {
+        isReturned: true,
+        returnedDate: Date()
+       }
+       const result = await updateBurrow(filter, update)
+
+       if (result?._id){
+        //update the book
+        const bookUpdate = {
+            _id: result.bookId,
+            isAvailable: true,
+            dueDate: null
+        }
+        await updateBookById(bookUpdate)
+
+        return res.json({
+            status: "success",
+            message: "You have successfully return the book. Thank you!",
+        })
+       }
+       res.json({
+        status: "error",
+        message: "Something went wrong please contact administration",
+    })
+       
+    } catch (error) {
+        next(error)
+    }
+})
 export default router;
