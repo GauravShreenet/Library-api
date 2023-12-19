@@ -6,6 +6,7 @@
 
 @rootApi = http://localhost:8000/api/v1/users
 @bookApi = http://localhost:8000/api/v1/books
+@reviewApi = http://localhost:8000/api/v1/reviews
 
 # ===== admin user
 ### create new admin usere
@@ -64,3 +65,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJAYi5jb20iLCJp
     "publishYr": "2016",
     "description": "'An in-your-face guide to living with integrity and finding happiness in sometimes-painful places.' Kirkus 'Hilarious, vulgar, and immensely thought-provoking. Only read if you're willing to set aside all excuses and take an active role in living a f*cking better life.' Steve Kamb, bestselling author of Level Up Your Life and founder of nerdfitness.com EVERYTHING WE'VE BEEN TOLD ABOUT HOW TO IMPROVE OUR LIVES IS WRONG. NOW SUPERSTAR BLOGGER MARK MANSON TELLS US WHAT WE NEED TO DO TO GET IT RIGHT. For decades, we've been told that positive thinking is the key to a happy, rich life. Drawing on academic research and the life experience that comes from breaking the rules, Mark Manson is ready to explode that myth. The key to a good life, according to Manson, is..."
 }
+
+# =============== review
+###get all reviews
+GET {{reviewApi}}

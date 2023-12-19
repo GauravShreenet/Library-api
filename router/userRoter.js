@@ -1,25 +1,40 @@
 import express from 'express';
 import { compairPassword, hashPassWord } from '../utils/bcrypt.js';
 import { createUser, getManyStudents, getUserByEmail, updateRefreshJWT } from '../model/UserModel.js';
-import { loginValidation } from '../middlewares/joiValidation.js';
+import { loginValidation, newUserValidation } from '../middlewares/joiValidation.js';
 import { signAccessJWT, signJWTs } from '../utils/jwtHelper.js';
 import { adminAuth, refreshAuth, userAuth } from '../middlewares/authMiddleware.js';
 import { deleteSession } from '../model/session/SessionModel.js';
 
 const router = express.Router()
 
-router.post("/", (req, res, next) => {
+router.post("/", newUserValidation, async (req, res, next) => {
     try {
+        req.body.password = hashPassWord(req.body.password);
+
+        const user = await createUser(req.body);
+
+        if (user?._id) {
+            return res.json({
+                status: 'success',
+                message: 'Your account has been created successfully. You may login',
+            });
+        }
+
         res.json({
-            status: 'success',
-            message: 'ToDo new user'
+            status: 'error',
+            message: 'The user cannot be created',
         })
     } catch (error) {
-        next(error)
+        if (error.message.includes("E11000 duplicate key error collection")) {
+            error.message = "Email already existing";
+            error.errorCode = 200;
+        }
+        next(error);
     }
 })
 
-router.post("/admin-user", async (req, res, next) => {
+router.post("/admin-user", adminAuth, async (req, res, next) => {
     try {
         req.body.password = hashPassWord(req.body.password);
 
@@ -45,6 +60,8 @@ router.post("/admin-user", async (req, res, next) => {
         next(error);
     }
 })
+
+
 
 //below this router should be private
 router.post("/login", loginValidation, async (req, res, next) => {

@@ -18,8 +18,10 @@ app.use("/api/v1/users", userRouter);
 import bookRouter from './router/bookRouter.js';
 import { userAuth } from './middlewares/authMiddleware.js';
 import burrowRouter from './router/burrowRouter.js';
+import reviewRouter from './router/reviewRouter.js';
 app.use("/api/v1/books", bookRouter);
 app.use("/api/v1/burrows", userAuth, burrowRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 
 app.get("/", (req,res)=>{

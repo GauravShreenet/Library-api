@@ -13,17 +13,14 @@ router.get("/", async (req, res, next) => {
         const burrows =
             role === 'admin'
                 ? await getManyBurrow({})
-                : getManyBurrow({ userId: _id })
-        burrows?.length ?
+                : await getManyBurrow({ userId: _id })
+        
             res.json({
                 status: 'success',
                 message: "Here is the list of burrow hsitory",
                 burrows,
             })
-            : res.json({
-                status: 'error',
-                message: "Unable to return burrow history, please contact administrator"
-            })
+           
     } catch (error) {
         next(error)
     }
